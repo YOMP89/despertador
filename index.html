@@ -72,5 +72,43 @@
         <button onclick="setAlarm()">Activar despertador</button>
         <div id="message" class="message"></div>
     </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+            setTimeout(updateTime, 1000);
+        }
+
+        let alarmTime = null;
+        let alarmTimeout = null;
+
+        function setAlarm() {
+            const alarmInput = document.getElementById('alarmTime').value;
+            if (!alarmInput) {
+                alert('Por favor, selecciona una hora para el despertador.');
+                return;
+            }
+            alarmTime = alarmInput;
+            document.getElementById('message').textContent = `Despertador activado para las ${alarmTime}`;
+            checkAlarm();
+        }
+
+        function checkAlarm() {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            if (currentTime === alarmTime) {
+                alert('¡Es hora de despertar!');
+                document.getElementById('message').textContent = '';
+                alarmTime = null;
+            } else if (alarmTime) {
+                alarmTimeout = setTimeout(checkAlarm, 1000);
+            }
+        }
+
+        updateTime();
+    </script>
 </body>
 </html>
